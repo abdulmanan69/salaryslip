@@ -1,0 +1,2638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Professional salary slip generator with employee data management, customizable columns, and print-ready payroll slips. Perfect for HR departments and payroll management. Fast, offline-ready PWA application.">
+    <meta name="keywords" content="salary slip generator, payroll, HR management, employee salary, salary report generator, professional salary slip">
+    <meta name="author" content="Salary Slip Generator">
+    <meta name="theme-color" content="#1f3a5b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Salary Slip Generator">
+    <meta property="og:title" content="Salary Slip Generator - Professional Payroll Management">
+    <meta property="og:description" content="Create professional salary slips instantly. Manage employee data, customize columns, and generate print-ready payroll reports.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect fill='%231f3a5b' width='1200' height='630'/%3E%3Ctext x='600' y='315' dominant-baseline='middle' text-anchor='middle' font-size='120' font-weight='bold' fill='white' font-family='Arial'%3ESalary Slip Generator%3C/text%3E%3C/svg%3E">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%231f3a5b' width='100' height='100'/%3E%3Ctext x='50' y='50' dominant-baseline='middle' text-anchor='middle' font-size='50' font-weight='bold' fill='white' font-family='Arial'%3ERs%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%231f3a5b' width='180' height='180' rx='45'/%3E%3Ctext x='90' y='90' dominant-baseline='middle' text-anchor='middle' font-size='80' font-weight='bold' fill='white' font-family='Arial'%3ERs%3C/text%3E%3C/svg%3E">
+
+    <title>Salary Slip Generator - Professional Payroll Management</title>
+    <style>
+        :root {
+            /* Light Theme */
+            --primary-color: #1f3a5b;
+            --secondary-color: #b8d4e8;
+            --accent-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-bg: #f8f9fa;
+            --border-color: #dee2e6;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --success-bg: #d4edda;
+            --error-bg: #f8d7da;
+            --info-bg: #d1ecf1;
+            --card-bg: #ffffff;
+            --header-bg-1: #1f3a5b;
+            --header-bg-2: #2d5a8c;
+            /* Message text colors */
+            --success-text: #155724;
+            --error-text: #721c24;
+            --info-text: #0c5460;
+            /* Salary slip colors */
+            --slip-primary-color: #1f3a5b;
+            --slip-secondary-color: #b8d4e8;
+            --slip-text-dark: #333;
+            /* Typography Scale (8px base) */
+            --font-size-h1: 32px;
+            --font-size-h2: 24px;
+            --font-size-h3: 18px;
+            --font-size-body: 14px;
+            --font-size-small: 12px;
+            --font-size-caption: 11px;
+            --line-height-heading: 1.2;
+            --line-height-body: 1.6;
+            --line-height-form: 1.4;
+            /* Spacing Scale (8px base grid) */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+        }
+
+        /* Dark Theme */
+        html[data-theme="dark"] {
+            --primary-color: #4a8fff;
+            --secondary-color: #3d5a7a;
+            --accent-color: #66cc66;
+            --danger-color: #ff6b6b;
+            --warning-color: #ffd93d;
+            --light-bg: #1e1e1e;
+            --border-color: #333333;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --success-bg: #2d5a2d;
+            --error-bg: #5a2d2d;
+            --info-bg: #2d3d5a;
+            --card-bg: #2a2a2a;
+            --header-bg-1: #1a1a2e;
+            --header-bg-2: #16213e;
+            /* Message text colors */
+            --success-text: #28a745;
+            --error-text: #ff6b6b;
+            --info-text: #38a9d9;
+            /* Salary slip colors */
+            --slip-primary-color: #4a8fff;
+            --slip-secondary-color: #3d5a7a;
+            --slip-text-dark: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--card-bg) 100%);
+            color: var(--text-primary);
+            font-size: var(--font-size-body);
+            line-height: var(--line-height-body);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--header-bg-1) 0%, var(--header-bg-2) 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header-brand svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .theme-toggle-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-toggle-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+
+        .theme-toggle-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        #installBtn {
+            display: none;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        #installBtn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+
+        #installBtn svg {
+            display: inline;
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        #offline-indicator {
+            display: none;
+            background: var(--danger-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Main Content */
+        main {
+            padding: 40px 0;
+        }
+
+        .page-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .page-section:hover {
+            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: var(--font-size-h2);
+            font-weight: 700;
+            line-height: var(--line-height-heading);
+            margin-bottom: var(--spacing-lg);
+            color: var(--primary-color);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .section-title svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Config Section */
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+            font-size: var(--font-size-body);
+            line-height: var(--line-height-form);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: var(--spacing-md);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: var(--font-size-body);
+            font-family: inherit;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(75, 143, 255, 0.1);
+        }
+
+        /* Focus-visible for better accessibility */
+        .btn:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        input[type="text"]:focus-visible,
+        input[type="number"]:focus-visible,
+        input[type="email"]:focus-visible,
+        input[type="password"]:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 1px;
+        }
+
+        input[type="checkbox"]:focus-visible,
+        input[type="radio"]:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: var(--font-size-body);
+            line-height: var(--line-height-body);
+            transition: all 0.3s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #4a8fff 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(75, 143, 255, 0.3);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 204, 102, 0.3);
+        }
+
+        .btn-success:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #e74c3c 100%);
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-danger:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--light-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--border-color);
+        }
+
+        .btn-sm {
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-size: var(--font-size-small);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(25%);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #4a8fff 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+        }
+
+        th:last-child {
+            border-right: none;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:hover {
+            background-color: var(--light-bg);
+        }
+
+        tbody tr.selected {
+            background-color: rgba(75, 143, 255, 0.25);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        td {
+            padding: 12px;
+            border-right: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+
+        td:last-child {
+            border-right: none;
+        }
+
+        .input-cell {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: inherit;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .input-cell:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: var(--light-bg);
+            box-shadow: 0 0 3px rgba(75, 143, 255, 0.3);
+        }
+
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+
+        .cell-actions {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        /* Column Manager */
+        .column-manager {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            padding: 20px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .column-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .column-item button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--danger-color);
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .column-item button:hover {
+            transform: scale(1.2);
+        }
+
+        .column-item button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Paste Area */
+        #pasteArea {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px dashed var(--border-color);
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        #pasteInput {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            resize: vertical;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        #pasteInput:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(75, 143, 255, 0.1);
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .message.success {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.info {
+            background-color: var(--info-bg);
+            color: var(--info-text);
+            border: 1px solid #bee5eb;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: min(85vh, calc(100% - 100px));
+            overflow-y: auto;
+            scrollbar-gutter: stable;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 22px;
+        }
+
+        .close-btn {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            color: var(--primary-color);
+            transform: rotate(90deg);
+        }
+
+        .preview-slip {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Salary Slip Print - Unchanged styling */
+        .salary-slip {
+            page-break-after: always;
+            padding: 30px;
+            background: white;
+            font-family: 'Arial', sans-serif;
+            border: 1px solid #ccc;
+            font-size: 13px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .slip-company-header {
+            background-color: var(--slip-primary-color);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 22px;
+            font-weight: bold;
+            margin: -30px -30px 0 -30px;
+            letter-spacing: 1px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .slip-title {
+            background-color: var(--slip-secondary-color);
+            color: var(--slip-primary-color);
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #999;
+            line-height: 1.4;
+        }
+
+        .slip-main-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+            line-height: 1.4;
+        }
+
+        .slip-main-table td {
+            padding: 10px;
+            border: 1px solid #999;
+            vertical-align: middle;
+            line-height: 1.4;
+        }
+
+        .slip-month-row {
+            background-color: #f0f0f0;
+            line-height: 1.4;
+        }
+
+        .slip-month-label {
+            font-weight: bold;
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #999;
+            text-align: left;
+            line-height: 1.4;
+            background-color: #f0f0f0;
+            vertical-align: middle;
+        }
+
+        .slip-month-value {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: right;
+            line-height: 1.4;
+            background-color: #ffffff;
+            vertical-align: middle;
+        }
+
+        .slip-earnings-section {
+            background-color: #e8f0f8;
+            padding: 10px;
+            line-height: 1.4;
+        }
+
+        .slip-deductions-section {
+            background-color: #f5d7dd;
+            padding: 10px;
+            line-height: 1.4;
+        }
+
+        .slip-earnings-header {
+            background-color: var(--slip-secondary-color);
+            color: var(--slip-primary-color);
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #999;
+            line-height: 1.4;
+        }
+
+        .slip-deductions-header {
+            background-color: var(--slip-secondary-color);
+            color: var(--slip-primary-color);
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #999;
+            line-height: 1.4;
+        }
+
+        .slip-item-label {
+            font-weight: 600;
+            color: var(--slip-text-dark);
+            vertical-align: middle;
+            line-height: 1.4;
+        }
+
+        .slip-net-salary {
+            background-color: var(--slip-primary-color);
+            color: white;
+            font-weight: bold;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #999;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            line-height: 1.4;
+        }
+
+        .slip-cell-label {
+            text-align: left;
+            font-weight: 600;
+            padding: 10px;
+            border: 1px solid #999;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        .slip-cell-value {
+            text-align: right;
+            padding: 10px;
+            border: 1px solid #999;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        .slip-cell-empty {
+            padding: 10px;
+            border: 1px solid #999;
+            background-color: #ffffff;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        .slip-cell-label.slip-earnings-section,
+        .slip-cell-value.slip-earnings-section,
+        .slip-cell-empty.slip-earnings-section {
+            background-color: #e8f0f8;
+        }
+
+        .slip-cell-label.slip-deductions-section,
+        .slip-cell-value.slip-deductions-section,
+        .slip-cell-empty.slip-deductions-section {
+            background-color: #f5d7dd;
+        }
+
+        .slip-section-header {
+            background-color: var(--slip-secondary-color);
+            font-weight: bold;
+            color: var(--slip-primary-color);
+            padding: 10px;
+            border: 1px solid #999;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        .slip-footer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        .slip-footer-table td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: center;
+            font-weight: 600;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        .slip-footer-table tr:last-child td {
+            height: 40px;
+            background-color: #f0f0f0;
+        }
+
+        /* Print */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body {
+                background: white !important;
+                padding: 0;
+                margin: 0.5in;
+                font-size: 11px;
+            }
+
+            .container {
+                padding: 0;
+                max-width: 100%;
+            }
+
+            header, main .page-section:not(.print-content), footer {
+                display: none;
+            }
+
+            .print-content {
+                padding: 0;
+                box-shadow: none;
+                margin: 0;
+            }
+
+            .salary-slip {
+                margin: 0 0 20px 0;
+                page-break-inside: avoid;
+            }
+
+            /* Use theme colors for professional print output */
+            .slip-company-header {
+                background-color: var(--slip-primary-color) !important;
+                color: white !important;
+            }
+
+            .slip-title {
+                background-color: var(--slip-secondary-color) !important;
+                color: var(--slip-primary-color) !important;
+            }
+
+            .slip-section-header {
+                background-color: var(--slip-secondary-color) !important;
+                color: var(--slip-primary-color) !important;
+            }
+
+            .slip-net-salary {
+                background-color: var(--slip-primary-color) !important;
+                color: white !important;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 30px 0;
+            margin-top: 60px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .footer-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .footer-divider {
+            width: 1px;
+            height: 20px;
+            background: var(--border-color);
+        }
+
+        /* Responsive - Ultra-small devices (320px) */
+        @media (max-width: 480px) {
+            .header-brand span {
+                display: none; /* Show only icon on smallest screens */
+            }
+
+            .header-actions {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .config-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 50% auto;
+                padding: var(--spacing-lg);
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            th, td {
+                padding: 6px 4px;
+                font-size: 11px;
+            }
+
+            .cell-actions .btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+
+            .page-section {
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-md);
+            }
+
+            .section-title {
+                font-size: 20px;
+                margin-bottom: var(--spacing-md);
+                padding-bottom: var(--spacing-sm);
+            }
+        }
+
+        /* Responsive - Tablets and larger phones (768px) */
+        @media (max-width: 768px) {
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-section {
+                padding: var(--spacing-lg);
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+
+            .column-manager {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .table-wrapper {
+                font-size: 12px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20% auto;
+                padding: 20px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .footer-divider {
+                width: 100%;
+                height: 1px;
+            }
+        }
+
+        /* Responsive - Tablets and larger (1024px) */
+        @media (min-width: 1024px) {
+            .config-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .page-section {
+                padding: var(--spacing-xl);
+                margin-bottom: 30px;
+            }
+
+            .btn-group {
+                flex-direction: row;
+            }
+
+            header, main .page-section, footer {
+                margin: 0 auto;
+            }
+        }
+
+        /* Responsive - Large desktop (1440px) */
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1400px;
+            }
+
+            .page-section {
+                padding: 40px;
+                margin-bottom: 35px;
+            }
+
+            .config-grid {
+                gap: var(--spacing-lg);
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 12px;
+            }
+        }
+
+        /* Column Config Dialog */
+        .column-config-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 1001;
+            animation: slideUp 0.3s;
+        }
+
+        .column-config-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .column-config-overlay.active {
+            display: block;
+        }
+
+        .column-config-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .column-config-group {
+            margin-bottom: 20px;
+        }
+
+        .column-config-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .column-config-group input,
+        .column-config-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .column-config-group input:focus,
+        .column-config-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(75, 143, 255, 0.1);
+        }
+
+        .section-options,
+        .logic-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--light-bg);
+            font-size: 14px;
+        }
+
+        .option-label:hover {
+            border-color: var(--primary-color);
+            background: var(--card-bg);
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+
+        .option-label.selected {
+            border-color: var(--primary-color);
+            background: rgba(75, 143, 255, 0.1);
+        }
+
+        .column-config-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: flex-end;
+        }
+
+        .help-text {
+            font-size: var(--font-size-small);
+            color: var(--text-secondary);
+            margin-top: var(--spacing-sm);
+            line-height: var(--line-height-form);
+        }
+
+        .column-metadata-badge {
+            display: inline-block;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: var(--light-bg);
+            color: var(--text-secondary);
+            margin-left: 8px;
+        }
+
+        /* Loading */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="header-brand">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9c-1 0-2 1-2 2v10c0 1 1 2 2 2h8c1 0 2-1 2-2V7c0-1-1-2-2-2z"/>
+                        <path d="M12 9v2M12 15v2"/>
+                    </svg>
+                    <span>Salary Slip Generator</span>
+                </div>
+                <div class="header-actions">
+                    <div id="offline-indicator">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; width: 16px; height: 16px; margin-right: 6px;">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        Offline Mode
+                    </div>
+                    <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle dark and light theme">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="themeIcon">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <span id="themeLabel">Dark</span>
+                    </button>
+                    <button id="installBtn" title="Install App" aria-label="Install application as PWA">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v16M6 12l6 6 6-6M4 20h16"/>
+                        </svg>
+                        Install
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <section class="page-section" id="quick-start-section">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="padding: 15px; background: var(--light-bg); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                        <h4 style="margin: 0 0 8px 0; color: var(--primary-color); font-size: 14px;">Step 1: Configure Settings</h4>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                            Set your company name, select the salary month/year, and choose how many slips per page you want.
+                        </p>
+                    </div>
+                    <div style="padding: 15px; background: var(--light-bg); border-radius: 8px; border-left: 4px solid var(--accent-color);">
+                        <h4 style="margin: 0 0 8px 0; color: var(--accent-color); font-size: 14px;">Step 2: Add Columns</h4>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                            Use quick-add buttons or create custom columns. Define whether they add to earnings or deduct from salary.
+                        </p>
+                    </div>
+                    <div style="padding: 15px; background: var(--light-bg); border-radius: 8px; border-left: 4px solid #17a2b8;">
+                        <h4 style="margin: 0 0 8px 0; color: #17a2b8; font-size: 14px;">Step 3: Enter Data</h4>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                            Add employee rows and enter their salary information. Paste from Excel for quick data import.
+                        </p>
+                    </div>
+                    <div style="padding: 15px; background: var(--light-bg); border-radius: 8px; border-left: 4px solid #ffc107;">
+                        <h4 style="margin: 0 0 8px 0; color: #ffc107; font-size: 14px;">Step 4: Preview & Print</h4>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                            Preview individual salary slips and print selected ones with proper formatting.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Configuration Section -->
+            <section class="page-section" id="config-section">
+                <div class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1"/>
+                        <path d="M12 1v6m8.66-2.34l-4.24 4.24m2 8m-2-8l4.24 4.24M12 23v-6m-8.66-2.34l4.24-4.24m-2-8m2 8l-4.24-4.24"/>
+                    </svg>
+                    Configuration
+                </div>
+
+                <div style="margin-bottom: 25px; padding: 15px; background: var(--light-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                    <p style="margin: 0 0 12px 0; font-size: 12px; color: var(--text-secondary); font-weight: 600;">
+                        📋 Quick Templates:
+                    </p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" onclick="applyTemplate('standard')" title="Basic salary structure">
+                            Standard
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="applyTemplate('it')" title="IT industry salary structure">
+                            IT Industry
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="applyTemplate('sales')" title="Sales team salary structure">
+                            Sales Team
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="applyTemplate('custom')" title="Start from scratch">
+                            Custom
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-grid">
+                    <div class="form-group">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" placeholder="Enter company name" value="ABC COMPANY">
+                    </div>
+                    <div class="form-group">
+                        <label for="salaryMonth">Salary Month</label>
+                        <select id="salaryMonth">
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="salaryYear">Salary Year</label>
+                        <input type="number" id="salaryYear" value="2025" min="2000" max="2100">
+                    </div>
+                    <div class="form-group">
+                        <label for="slipsPerPage">Slips Per Page</label>
+                        <select id="slipsPerPage">
+                            <option value="1">1 Slip per page</option>
+                            <option value="2" selected>2 Slips per page</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column Manager -->
+            <section class="page-section" id="columns-section">
+                <div class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 10h18M3 6h18M3 14h18M3 18h18"/>
+                    </svg>
+                    Manage Columns
+                </div>
+                <div class="column-manager" id="columnManager"></div>
+                <div style="margin-top: 20px; padding: 20px; background: var(--light-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; font-weight: 600;">Quick Add Common Columns:</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px;">
+                            <button class="btn btn-secondary btn-sm" onclick="quickAddColumn('bonus', 'Bonus Amount', 'allowances', 'addition')" title="Add monthly bonus">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <path d="M12 2v20M17 5H9c-1 0-2 1-2 2v10c0 1 1 2 2 2h8c1 0 2-1 2-2V7c0-1-1-2-2-2z"/>
+                                </svg>
+                                Bonus
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="quickAddColumn('leaveDeduction', 'Leave Deduction', 'deductions', 'subtraction')" title="Deduct unpaid leaves">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2V17zm4 0h-2V7h2V17zm4 0h-2v-4h2V17z"/>
+                                </svg>
+                                Leave
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="quickAddColumn('medicalAllowance', 'Medical Allowance', 'allowances', 'addition')" title="Add medical benefits">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <path d="M12 5v14M5 12h14"/>
+                                </svg>
+                                Medical
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="quickAddColumn('transportAllowance', 'Transport Allowance', 'allowances', 'addition')" title="Add transport benefits">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <path d="M18 15v2H6v-2M3 9h18V7H3v2zm0 6h18v-2H3v2z"/>
+                                </svg>
+                                Transport
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="quickAddColumn('tds', 'TDS Deduction', 'deductions', 'subtraction')" title="Tax deducttion at source">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                                TDS
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="quickAddColumn('providentFund', 'PF Contribution', 'deductions', 'subtraction')" title="Provident fund deduction">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <path d="M12 1v22M1 12h22"/>
+                                </svg>
+                                PF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addNewColumn()" style="margin-top: 15px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Custom Column
+                </button>
+            </section>
+
+            <!-- Actions -->
+            <section class="page-section">
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="addRow()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Row
+                    </button>
+                    <button class="btn btn-success" id="printBtn" onclick="printSelected()" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 6 2 18 2 18 9"/>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                            <rect x="6" y="14" width="12" height="8"/>
+                        </svg>
+                        Print Selected
+                    </button>
+                    <button class="btn btn-danger" id="deleteBtn" onclick="deleteSelected()" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                        Delete Selected
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearAllRows()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                        Clear All
+                    </button>
+                    <button class="btn btn-primary" onclick="togglePasteMode()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                        </svg>
+                        Paste from Excel
+                    </button>
+                </div>
+
+                <!-- Paste Area -->
+                <div id="pasteArea">
+                    <div class="message info">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="10"/>
+                            <text x="12" y="16" text-anchor="middle" fill="white" font-size="14" font-weight="bold">i</text>
+                        </svg>
+                        Paste your Excel data below. Comma-formatted numbers (1,234.50) are automatically cleaned. Headers will be auto-detected.
+                    </div>
+                    <textarea id="pasteInput" placeholder="Paste Excel data here (tab-separated)..."></textarea>
+                    <div class="btn-group" style="margin-top: 12px;">
+                        <button class="btn btn-success" onclick="parsePasteData()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Parse Data
+                        </button>
+                        <button class="btn btn-secondary" onclick="togglePasteMode()">Cancel</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Salary Slip Designer -->
+            <section class="page-section" id="slip-designer-section">
+                <div class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M3 9h18M9 3v18"/>
+                    </svg>
+                    Salary Slip Designer Preview
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 13px;">
+                    Live preview of your salary slip structure. Add custom columns above to modify the layout.
+                </p>
+                <div id="slipDesignerPreview" style="border: 2px dashed var(--border-color); border-radius: 8px; padding: 20px; background: var(--light-bg); max-height: 400px; overflow-y: auto;">
+                    <div style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                        <p>Salary slip preview will appear here</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Add employee data rows to see the preview</p>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="updateSlipDesignerPreview()" style="margin-top: 15px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px;">
+                        <path d="M1 4v6h6M23 20v-6h-6"/>
+                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"/>
+                    </svg>
+                    Refresh Preview
+                </button>
+            </section>
+
+            <!-- Employee Data -->
+            <section class="page-section" id="employee-data-section">
+                <div class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+                    </svg>
+                    Employee Data
+                </div>
+
+                <div id="tableContainer" class="table-wrapper">
+                    <table id="dataTable">
+                        <thead id="tableHead">
+                            <tr>
+                                <th style="width: 50px;">
+                                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                        <line x1="12" y1="6" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <h3>No data yet</h3>
+                    <p>Add a row or paste from Excel to get started</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <span>Made with ❤️ by</span>
+                <a href="https://github.com/abdulmanan69" target="_blank" rel="noopener noreferrer">@abdulmanan69</a>
+                <div class="footer-divider"></div>
+                <span>© 2025 Salary Slip Generator. All rights reserved.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Salary Slip Preview</h2>
+                <button class="close-btn" onclick="closePreview()">×</button>
+            </div>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+
+    <!-- Column Configuration Dialog -->
+    <div id="columnConfigOverlay" class="column-config-overlay"></div>
+    <div id="columnConfigDialog" class="column-config-dialog" style="display: none;">
+        <div class="column-config-title">Configure New Column</div>
+
+        <div class="column-config-group">
+            <label for="colName">Column Name *</label>
+            <input type="text" id="colName" placeholder="e.g., bonusAmount, overtimeHours">
+            <div class="help-text">Technical identifier (no spaces, use camelCase)</div>
+        </div>
+
+        <div class="column-config-group">
+            <label for="colLabel">Column Label *</label>
+            <input type="text" id="colLabel" placeholder="e.g., Bonus Amount, Overtime Hours">
+            <div class="help-text">Display name shown in the salary slip</div>
+        </div>
+
+        <div class="column-config-group">
+            <label>Section Assignment *</label>
+            <div class="section-options">
+                <label class="option-label">
+                    <input type="radio" name="section" value="earnings" checked>
+                    <span>Earnings</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="section" value="allowances">
+                    <span>Allowances</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="section" value="deductions">
+                    <span>Deductions</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="section" value="neutral">
+                    <span>Neutral</span>
+                </label>
+            </div>
+            <div class="help-text">Where the column appears in the salary slip</div>
+        </div>
+
+        <div class="column-config-group">
+            <label>Business Logic Type *</label>
+            <div class="logic-options">
+                <label class="option-label">
+                    <input type="radio" name="logic" value="addition" checked>
+                    <span>Add (+)</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="logic" value="subtraction">
+                    <span>Subtract (-)</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="logic" value="neutral">
+                    <span>Info Only</span>
+                </label>
+            </div>
+            <div class="help-text">How the value affects total salary calculations</div>
+        </div>
+
+        <div class="column-config-actions">
+            <button class="btn btn-secondary" onclick="cancelColumnConfig()">Cancel</button>
+            <button class="btn btn-primary" onclick="confirmColumnConfig()">Add Column</button>
+        </div>
+    </div>
+
+    <script>
+        // Theme Management
+        function initTheme() {
+            const theme = localStorage.getItem('salaryTheme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            updateThemeButton(theme);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('salaryTheme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const label = document.getElementById('themeLabel');
+            label.textContent = theme === 'light' ? 'Dark' : 'Light';
+        }
+
+        // Default columns
+        const defaultColumns = [
+            'agentName', 'doj', 'salaryPackage', 'perDaySalary', 'paidDays',
+            'salesCount', 'salesCommission', 'paidBasicSalary', 'totalPaidBasicCommission',
+            'fuelAllowance', 'trainingDues', 'advance'
+        ];
+
+        const defaultColumnLabels = {
+            'agentName': 'Agent Name',
+            'doj': 'DOJ',
+            'salaryPackage': 'Salary Package',
+            'perDaySalary': 'Per Day Salary',
+            'paidDays': 'Paid Days',
+            'salesCount': 'Sales Count',
+            'salesCommission': 'Sales Commission',
+            'paidBasicSalary': 'Paid Basic Salary',
+            'totalPaidBasicCommission': 'Total Paid (Basic+Commission)',
+            'fuelAllowance': 'Fuel Allowance',
+            'trainingDues': 'Training Dues',
+            'advance': 'Advance'
+        };
+
+        let columns = [...defaultColumns];
+        let columnLabels = { ...defaultColumnLabels };
+        let columnMetadata = {
+            'agentName': { section: 'info', logic: 'neutral' },
+            'doj': { section: 'info', logic: 'neutral' },
+            'salaryPackage': { section: 'info', logic: 'neutral' },
+            'perDaySalary': { section: 'info', logic: 'neutral' },
+            'paidDays': { section: 'earnings', logic: 'neutral' },
+            'salesCount': { section: 'earnings', logic: 'neutral' },
+            'salesCommission': { section: 'earnings', logic: 'addition' },
+            'paidBasicSalary': { section: 'earnings', logic: 'addition' },
+            'totalPaidBasicCommission': { section: 'earnings', logic: 'neutral' },
+            'fuelAllowance': { section: 'allowances', logic: 'addition' },
+            'trainingDues': { section: 'allowances', logic: 'addition' },
+            'advance': { section: 'deductions', logic: 'subtraction' }
+        };
+
+        // Get columns from localStorage or use defaults
+        function loadColumns() {
+            const saved = localStorage.getItem('salaryColumns');
+            if (saved) {
+                columns = JSON.parse(saved);
+                const labels = localStorage.getItem('salaryColumnLabels');
+                if (labels) {
+                    columnLabels = JSON.parse(labels);
+                }
+                const metadata = localStorage.getItem('salaryColumnMetadata');
+                if (metadata) {
+                    columnMetadata = JSON.parse(metadata);
+                }
+            }
+        }
+
+        // Save columns to localStorage
+        function saveColumns() {
+            localStorage.setItem('salaryColumns', JSON.stringify(columns));
+            localStorage.setItem('salaryColumnLabels', JSON.stringify(columnLabels));
+            localStorage.setItem('salaryColumnMetadata', JSON.stringify(columnMetadata));
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('salaryData');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        // Save data to localStorage
+        function saveData(data) {
+            localStorage.setItem('salaryData', JSON.stringify(data));
+        }
+
+        // Render column manager with metadata
+        function renderColumnManager() {
+            const manager = document.getElementById('columnManager');
+            manager.innerHTML = columns.map((col, idx) => {
+                const meta = columnMetadata[col] || { section: 'neutral', logic: 'neutral' };
+                const sectionMap = { info: 'Info', earnings: 'Earnings', allowances: 'Allow.', deductions: 'Ded.', neutral: 'Neutral' };
+                const logicMap = { addition: '+', subtraction: '-', neutral: 'ⓘ' };
+                return `
+                    <div class="column-item">
+                        <div style="flex: 1;">
+                            <div>${columnLabels[col]}</div>
+                            <span class="column-metadata-badge">${sectionMap[meta.section]} / ${logicMap[meta.logic]}</span>
+                        </div>
+                        <button onclick="deleteColumn('${col}')" title="Delete column" aria-label="Delete column ${col}">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M6 18c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H6v10zM19 5h-3.5l-1-1h-9l-1 1H5v2h14V5z"/>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Column configuration dialog functions
+        function showColumnConfigDialog() {
+            document.getElementById('columnConfigOverlay').classList.add('active');
+            document.getElementById('columnConfigDialog').style.display = 'block';
+            document.getElementById('colName').focus();
+            updateOptionLabelsUI();
+        }
+
+        function updateOptionLabelsUI() {
+            document.querySelectorAll('.option-label').forEach(label => {
+                if (label.querySelector('input:checked')) {
+                    label.classList.add('selected');
+                } else {
+                    label.classList.remove('selected');
+                }
+            });
+        }
+
+        function cancelColumnConfig() {
+            document.getElementById('columnConfigOverlay').classList.remove('active');
+            document.getElementById('columnConfigDialog').style.display = 'none';
+            document.getElementById('colName').value = '';
+            document.getElementById('colLabel').value = '';
+            document.querySelector('input[name="section"][value="earnings"]').checked = true;
+            document.querySelector('input[name="logic"][value="addition"]').checked = true;
+            updateOptionLabelsUI();
+        }
+
+        function confirmColumnConfig() {
+            const name = document.getElementById('colName').value.trim();
+            const label = document.getElementById('colLabel').value.trim();
+            const section = document.querySelector('input[name="section"]:checked').value;
+            const logic = document.querySelector('input[name="logic"]:checked').value;
+
+            if (!name) {
+                alert('Column name is required');
+                return;
+            }
+            if (!label) {
+                alert('Column label is required');
+                return;
+            }
+            if (columns.includes(name)) {
+                alert('Column name already exists');
+                return;
+            }
+
+            // Add the column
+            columns.push(name);
+            columnLabels[name] = label;
+            columnMetadata[name] = { section, logic };
+            saveColumns();
+            renderColumnManager();
+            renderTable(loadData());
+
+            // Close dialog
+            cancelColumnConfig();
+        }
+
+        // Add new column
+        function addNewColumn() {
+            showColumnConfigDialog();
+        }
+
+        // Template configurations
+        const salaryTemplates = {
+            standard: {
+                name: 'Standard',
+                description: 'Basic salary structure with essential components',
+                columns: ['agentName', 'doj', 'salaryPackage', 'perDaySalary', 'paidDays', 'paidBasicSalary', 'advance']
+            },
+            it: {
+                name: 'IT Industry',
+                description: 'IT-specific salary structure with bonus and benefits',
+                columns: ['agentName', 'doj', 'salaryPackage', 'paidDays', 'paidBasicSalary', 'bonus', 'medicalAllowance', 'transportAllowance', 'advance', 'tds']
+            },
+            sales: {
+                name: 'Sales Team',
+                description: 'Sales-focused structure with commission tracking',
+                columns: ['agentName', 'doj', 'salaryPackage', 'paidDays', 'salesCount', 'salesCommission', 'paidBasicSalary', 'bonus', 'advance', 'tds']
+            }
+        };
+
+        // Apply salary template
+        function applyTemplate(templateName) {
+            if (templateName === 'custom') {
+                columns = [...defaultColumns];
+                columnLabels = { ...defaultColumnLabels };
+                columnMetadata = {
+                    'agentName': { section: 'info', logic: 'neutral' },
+                    'doj': { section: 'info', logic: 'neutral' },
+                    'salaryPackage': { section: 'info', logic: 'neutral' },
+                    'perDaySalary': { section: 'info', logic: 'neutral' },
+                    'paidDays': { section: 'earnings', logic: 'neutral' },
+                    'salesCount': { section: 'earnings', logic: 'neutral' },
+                    'salesCommission': { section: 'earnings', logic: 'addition' },
+                    'paidBasicSalary': { section: 'earnings', logic: 'addition' },
+                    'totalPaidBasicCommission': { section: 'earnings', logic: 'neutral' },
+                    'fuelAllowance': { section: 'allowances', logic: 'addition' },
+                    'trainingDues': { section: 'allowances', logic: 'addition' },
+                    'advance': { section: 'deductions', logic: 'subtraction' }
+                };
+                showTemporaryMessage('✓ Custom template selected - start from default columns');
+            } else if (salaryTemplates[templateName]) {
+                const template = salaryTemplates[templateName];
+                columns = template.columns;
+                columnLabels = {};
+                columnMetadata = {};
+
+                // Set up labels and metadata for template columns
+                columns.forEach(col => {
+                    columnLabels[col] = defaultColumnLabels[col] || col;
+                    columnMetadata[col] = {
+                        section: defaultColumnLabels[col] ? 'info' : 'earnings',
+                        logic: 'neutral'
+                    };
+                });
+
+                saveColumns();
+                renderColumnManager();
+                renderTable(loadData());
+                showTemporaryMessage(`✓ "${template.name}" template applied!`);
+            }
+        }
+
+        // Quick add column function
+        function quickAddColumn(colName, colLabel, section, logic) {
+            if (columns.includes(colName)) {
+                alert(`Column "${colLabel}" already exists`);
+                return;
+            }
+
+            columns.push(colName);
+            columnLabels[colName] = colLabel;
+            columnMetadata[colName] = { section, logic };
+            saveColumns();
+            renderColumnManager();
+            renderTable(loadData());
+
+            // Show success feedback
+            showTemporaryMessage(`✓ "${colLabel}" column added successfully!`);
+        }
+
+        // Show temporary message feedback
+        function showTemporaryMessage(message) {
+            const tempDiv = document.createElement('div');
+            tempDiv.className = 'message success';
+            tempDiv.style.position = 'fixed';
+            tempDiv.style.bottom = '20px';
+            tempDiv.style.right = '20px';
+            tempDiv.style.zIndex = '2000';
+            tempDiv.style.minWidth = '300px';
+            tempDiv.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                ${message}
+            `;
+            document.body.appendChild(tempDiv);
+
+            setTimeout(() => {
+                tempDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => tempDiv.remove(), 300);
+            }, 2000);
+        }
+
+        // Update salary slip designer preview
+        function updateSlipDesignerPreview() {
+            const data = loadData();
+            const preview = document.getElementById('slipDesignerPreview');
+
+            if (data.length === 0) {
+                preview.innerHTML = `
+                    <div style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                        <p>No employee data yet</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Add rows to see the salary slip preview</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Use the first row as preview
+            const previewData = data[0];
+            const slip = generateSalarySlip(previewData);
+            preview.innerHTML = `
+                <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${slip}
+                </div>
+            `;
+        }
+
+        // Delete column
+        function deleteColumn(col) {
+            if (!confirm(`Delete column "${columnLabels[col]}"?`)) return;
+            columns = columns.filter(c => c !== col);
+            delete columnLabels[col];
+            delete columnMetadata[col];
+            saveColumns();
+            renderColumnManager();
+            renderTable(loadData());
+        }
+
+        // Update section selection styling
+        document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('change', function(e) {
+                if (e.target.name === 'section' || e.target.name === 'logic') {
+                    updateOptionLabelsUI();
+                }
+            });
+        });
+
+        // Render table
+        function renderTable(data) {
+            const thead = document.getElementById('tableHead');
+            const tbody = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+
+            // Update header
+            thead.innerHTML = `
+                <tr>
+                    <th style="width: 50px;"><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                    ${columns.map(col => `<th>${columnLabels[col]}</th>`).join('')}
+                    <th style="width: 100px;">Actions</th>
+                </tr>
+            `;
+
+            // Update body
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
+
+            data.forEach((row, idx) => {
+                const tr = document.createElement('tr');
+                tr.id = `row-${idx}`;
+                tr.innerHTML = `
+                    <td><input type="checkbox" class="rowCheckbox" onchange="updateButtonStates()"></td>
+                    ${columns.map(col => `
+                        <td>
+                            <input type="text" class="input-cell" data-col="${col}" data-row="${idx}"
+                                   value="${row[col] || ''}" onchange="updateRow(${idx}, '${col}', this.value)" oninput="updateRow(${idx}, '${col}', this.value)">
+                        </td>
+                    `).join('')}
+                    <td class="cell-actions">
+                        <button class="btn btn-primary btn-sm" onclick="previewRow(${idx})" title="Preview" aria-label="Preview salary slip for row ${idx + 1}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update designer preview when table is rendered
+            updateSlipDesignerPreview();
+        }
+
+        // Add row
+        function addRow() {
+            const data = loadData();
+            const newRow = {};
+            columns.forEach(col => newRow[col] = '');
+            data.push(newRow);
+            saveData(data);
+            renderTable(data);
+        }
+
+        // Update row
+        function updateRow(rowIndex, col, value) {
+            const data = loadData();
+            data[rowIndex][col] = value;
+            saveData(data);
+        }
+
+        // Preview row
+        function previewRow(rowIndex) {
+            const data = loadData();
+            const row = data[rowIndex];
+            const slip = generateSalarySlip(row);
+            document.getElementById('previewContent').innerHTML = `<div class="preview-slip">${slip}</div>`;
+            document.getElementById('previewModal').style.display = 'block';
+        }
+
+        // Close preview
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        // Generate salary slip with dynamic columns
+        function generateSalarySlip(data) {
+            const companyName = document.getElementById('companyName').value || 'COMPANY NAME';
+            const month = document.getElementById('salaryMonth').value;
+            const year = document.getElementById('salaryYear').value;
+            const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
+            const monthYear = `${monthName} ${year}`;
+
+            // Calculate totals based on column metadata
+            let earningsTotal = 0;
+            let deductionsTotal = 0;
+            const sectionRows = { earnings: [], allowances: [], deductions: [], neutral: [], info: [] };
+
+            // Organize columns by section and calculate totals
+            columns.forEach(col => {
+                const meta = columnMetadata[col] || { section: 'neutral', logic: 'neutral' };
+                const rawValue = data[col];
+
+                // For numeric columns with calculation logic, use parseFloat
+                // For text/info columns, use the raw string value
+                let value;
+                if (meta.logic === 'neutral' && meta.section === 'info') {
+                    // Info section: use raw text value
+                    value = rawValue || '';
+                } else {
+                    // Numeric sections: parse as float
+                    value = parseFloat(rawValue) || 0;
+                }
+
+                // Add to appropriate section
+                if (!sectionRows[meta.section]) {
+                    sectionRows[meta.section] = [];
+                }
+                sectionRows[meta.section].push({ col, label: columnLabels[col], value, meta, rawValue });
+
+                // Calculate totals (only for numeric logic types)
+                if (meta.logic === 'addition') {
+                    earningsTotal += parseFloat(rawValue) || 0;
+                } else if (meta.logic === 'subtraction') {
+                    deductionsTotal += parseFloat(rawValue) || 0;
+                }
+            });
+
+            const netPay = earningsTotal - deductionsTotal;
+
+            // Build employee info section
+            let infoRows = '';
+            sectionRows.info.forEach((item, idx) => {
+                if (idx % 2 === 0) {
+                    infoRows += '<tr>';
+                }
+                // For info section, display raw text values
+                infoRows += `
+                    <td class="slip-cell-label slip-earnings-section"><span class="slip-item-label">${item.label}:</span></td>
+                    <td class="slip-cell-value slip-earnings-section">${item.value}</td>
+                `;
+                if (idx % 2 === 1) {
+                    infoRows += '</tr>';
+                }
+            });
+            if (sectionRows.info.length % 2 !== 0) {
+                infoRows += '</tr>';
+            }
+
+            // Build earnings + allowances section
+            let earningAllowanceRows = '';
+            const maxEarnings = Math.max(sectionRows.earnings.length, sectionRows.allowances.length);
+            for (let i = 0; i < maxEarnings; i++) {
+                earningAllowanceRows += '<tr>';
+                const earning = sectionRows.earnings[i];
+                if (earning) {
+                    // For earnings: check if value is numeric and format accordingly
+                    const displayValue = typeof earning.value === 'number' && !isNaN(earning.value) ? earning.value.toFixed(2) : earning.value;
+                    earningAllowanceRows += `
+                        <td class="slip-cell-label slip-earnings-section"><span class="slip-item-label">${earning.label}:</span></td>
+                        <td class="slip-cell-value slip-earnings-section">${displayValue}</td>
+                    `;
+                } else {
+                    earningAllowanceRows += '<td class="slip-cell-empty slip-earnings-section"></td><td class="slip-cell-empty slip-earnings-section"></td>';
+                }
+
+                const allowance = sectionRows.allowances[i];
+                if (allowance) {
+                    // For allowances: check if value is numeric and format accordingly
+                    const displayValue = typeof allowance.value === 'number' && !isNaN(allowance.value) ? allowance.value.toFixed(2) : allowance.value;
+                    earningAllowanceRows += `
+                        <td class="slip-cell-label slip-deductions-section"><span class="slip-item-label">${allowance.label}:</span></td>
+                        <td class="slip-cell-value slip-deductions-section">${displayValue}</td>
+                    `;
+                } else {
+                    earningAllowanceRows += '<td class="slip-cell-empty slip-deductions-section"></td><td class="slip-cell-empty slip-deductions-section"></td>';
+                }
+                earningAllowanceRows += '</tr>';
+            }
+
+            // Add deductions
+            sectionRows.deductions.forEach((item) => {
+                const displayValue = typeof item.value === 'number' && !isNaN(item.value) ? item.value.toFixed(2) : item.value;
+                earningAllowanceRows += `
+                    <tr>
+                        <td class="slip-cell-empty slip-earnings-section"></td><td class="slip-cell-empty slip-earnings-section"></td>
+                        <td class="slip-cell-label slip-deductions-section"><span class="slip-item-label">${item.label}:</span></td>
+                        <td class="slip-cell-value slip-deductions-section">${displayValue}</td>
+                    </tr>
+                `;
+            });
+
+            // Add totals row
+            earningAllowanceRows += `
+                <tr>
+                    <td class="slip-cell-label slip-earnings-section"><span class="slip-item-label"><strong>Total Earnings:</strong></span></td>
+                    <td class="slip-cell-value slip-earnings-section"><strong>${earningsTotal.toFixed(2)}</strong></td>
+                    <td class="slip-cell-label slip-deductions-section"><span class="slip-item-label"><strong>Total Deductions:</strong></span></td>
+                    <td class="slip-cell-value slip-deductions-section"><strong>${deductionsTotal.toFixed(2)}</strong></td>
+                </tr>
+            `;
+
+            return `
+                <div class="slip-company-header">${companyName}</div>
+                <div class="slip-title">SALARY SLIP</div>
+
+                <table class="slip-main-table">
+                    <tr class="slip-month-row">
+                        <td class="slip-month-label">Salary Month & Year:</td>
+                        <td class="slip-month-value"><strong>${monthYear}</strong></td>
+                        <td class="slip-cell-empty"></td>
+                    </tr>
+                </table>
+
+                ${infoRows ? `
+                <table class="slip-main-table">
+                    <tr>
+                        <td colspan="4" class="slip-section-header slip-earnings-section">Employee Information</td>
+                    </tr>
+                    ${infoRows}
+                </table>
+                ` : ''}
+
+                <table class="slip-main-table">
+                    <tr>
+                        <td colspan="2" class="slip-earnings-header">EARNINGS</td>
+                        <td colspan="2" class="slip-deductions-header">ALLOWANCES & DEDUCTIONS</td>
+                    </tr>
+                    ${earningAllowanceRows}
+                </table>
+
+                <div class="slip-net-salary">
+                    <div class="slip-net-label">NET SALARY PAYABLE</div>
+                    <div class="slip-net-value">Rs. ${netPay.toFixed(2)}</div>
+                </div>
+
+                <table class="slip-footer-table">
+                    <tr>
+                        <td>Receiver Signature</td>
+                        <td>Authorized Signature</td>
+                    </tr>
+                    <tr>
+                        <td style="height: 40px;"></td>
+                        <td style="height: 40px;"></td>
+                    </tr>
+                </table>
+
+                <table class="slip-footer-table">
+                    <tr>
+                        <td style="border-right: 1px solid #999;">Employee</td>
+                        <td>HR Department</td>
+                    </tr>
+                </table>
+            `;
+        }
+
+        // Print selected
+        function printSelected() {
+            const checkboxes = document.querySelectorAll('.rowCheckbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Please select at least one row to print');
+                return;
+            }
+
+            const data = loadData();
+            const selectedIndices = Array.from(checkboxes).map(cb => {
+                return parseInt(cb.closest('tr').id.split('-')[1]);
+            });
+
+            let printContent = '';
+            selectedIndices.forEach((idx) => {
+                printContent += `<div class="salary-slip">${generateSalarySlip(data[idx])}</div>`;
+            });
+
+            const styles = `
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+                    html, body { margin: 0; padding: 0; background: white !important; }
+                    body { font-family: Arial, sans-serif; color: #333; font-size: 13px; line-height: 1.4; }
+                    .salary-slip { page-break-after: always; padding: 30px; background: white !important; font-size: 13px; line-height: 1.4; margin: 0; }
+                    .slip-company-header { background-color: #1f3a5b !important; color: white !important; text-align: center; padding: 12px; font-size: 22px; font-weight: bold; margin: -30px -30px 0 -30px; letter-spacing: 1px; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.4; }
+                    .slip-title { background-color: #b8d4e8 !important; color: #1f3a5b !important; text-align: center; padding: 10px; font-size: 18px; font-weight: bold; border-bottom: 1px solid #999; line-height: 1.4; }
+                    .slip-main-table { width: 100%; border-collapse: collapse; margin-top: 0; line-height: 1.4; }
+                    .slip-main-table td { padding: 10px; border: 1px solid #999; vertical-align: middle; line-height: 1.4; }
+                    .slip-month-row { background-color: #f0f0f0 !important; line-height: 1.4; }
+                    .slip-month-label { font-weight: bold; padding: 10px; border: 1px solid #999; text-align: left; line-height: 1.4; background-color: #f0f0f0 !important; vertical-align: middle; }
+                    .slip-month-value { border: 1px solid #999; padding: 10px; text-align: right; line-height: 1.4; background-color: #ffffff !important; vertical-align: middle; }
+                    .slip-cell-label { text-align: left; font-weight: 600; padding: 10px; border: 1px solid #999; line-height: 1.4; vertical-align: middle; }
+                    .slip-cell-value { text-align: right; padding: 10px; border: 1px solid #999; line-height: 1.4; vertical-align: middle; }
+                    .slip-cell-empty { padding: 10px; border: 1px solid #999; background-color: #ffffff; line-height: 1.4; vertical-align: middle; }
+                    .slip-cell-label.slip-earnings-section { background-color: #e8f0f8 !important; }
+                    .slip-cell-value.slip-earnings-section { background-color: #e8f0f8 !important; }
+                    .slip-cell-empty.slip-earnings-section { background-color: #e8f0f8 !important; }
+                    .slip-cell-label.slip-deductions-section { background-color: #f5d7dd !important; }
+                    .slip-cell-value.slip-deductions-section { background-color: #f5d7dd !important; }
+                    .slip-cell-empty.slip-deductions-section { background-color: #f5d7dd !important; }
+                    .slip-section-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; padding: 10px; border: 1px solid #999; line-height: 1.4; vertical-align: middle; }
+                    .slip-row-item { border: 1px solid #999; padding: 10px; line-height: 1.4; vertical-align: middle; }
+                    .slip-earnings-section { background-color: #e8f0f8 !important; padding: 10px; line-height: 1.4; }
+                    .slip-deductions-section { background-color: #f5d7dd !important; padding: 10px; line-height: 1.4; }
+                    .slip-earnings-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #999; line-height: 1.4; }
+                    .slip-deductions-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #999; line-height: 1.4; }
+                    .slip-item-label { font-weight: 600; color: #333 !important; vertical-align: middle; line-height: 1.4; }
+                    .slip-item-value { color: #333 !important; line-height: 1.4; }
+                    .slip-net-salary { background-color: #1f3a5b !important; color: white !important; font-weight: bold; padding: 12px; font-size: 16px; border: 1px solid #999; display: grid; grid-template-columns: 1fr 1fr; align-items: center; text-align: center; line-height: 1.4; }
+                    .slip-net-label { text-align: left; }
+                    .slip-net-value { text-align: right; padding-right: 20px; }
+                    .slip-footer-table { width: 100%; border-collapse: collapse; margin-top: 10px; line-height: 1.4; }
+                    .slip-footer-table td { border: 1px solid #999; padding: 10px; text-align: center; font-weight: 600; line-height: 1.4; vertical-align: middle; color: #333; }
+                    .slip-footer-table tr:last-child td { background-color: #f0f0f0 !important; }
+                    @media print {
+                        body { margin: 0; padding: 0; background: white; }
+                        .salary-slip { margin: 0; page-break-inside: avoid; }
+                    }
+                </style>
+            `;
+
+            const newWindow = window.open('', '', 'height=1000,width=900');
+            newWindow.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Salary Slips</title>${styles}</head><body>${printContent}</body></html>`);
+            newWindow.document.close();
+            setTimeout(() => newWindow.print(), 500);
+        }
+
+        // Delete selected
+        function deleteSelected() {
+            const checkboxes = document.querySelectorAll('.rowCheckbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Please select at least one row to delete');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete the selected rows?')) return;
+
+            const data = loadData();
+            const indicesToDelete = Array.from(checkboxes)
+                .map(cb => parseInt(cb.closest('tr').id.split('-')[1]))
+                .sort((a, b) => b - a);
+
+            indicesToDelete.forEach(idx => data.splice(idx, 1));
+            saveData(data);
+            renderTable(data);
+            updateButtonStates();
+        }
+
+        // Clear all rows
+        function clearAllRows() {
+            if (!confirm('Are you sure you want to clear all rows?')) return;
+            saveData([]);
+            renderTable([]);
+            updateButtonStates();
+        }
+
+        // Toggle select all
+        function toggleSelectAll() {
+            const isChecked = document.getElementById('selectAll').checked;
+            document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = isChecked);
+            updateButtonStates();
+        }
+
+        // Update button states
+        function updateButtonStates() {
+            const hasSelection = document.querySelector('.rowCheckbox:checked') !== null;
+            document.getElementById('printBtn').disabled = !hasSelection;
+            document.getElementById('deleteBtn').disabled = !hasSelection;
+        }
+
+        // Toggle paste mode
+        function togglePasteMode() {
+            const pasteArea = document.getElementById('pasteArea');
+            pasteArea.style.display = pasteArea.style.display === 'none' ? 'block' : 'none';
+            if (pasteArea.style.display === 'block') {
+                document.getElementById('pasteInput').focus();
+            }
+        }
+
+        // Clean numeric values: remove commas while preserving decimal points
+        function cleanNumericValue(value) {
+            if (typeof value !== 'string') {
+                return value;
+            }
+
+            const trimmed = value.trim();
+
+            // Check if the value contains numeric characters
+            if (!/[\d.,]/.test(trimmed)) {
+                // Non-numeric value, return as-is
+                return trimmed;
+            }
+
+            // Remove all commas but preserve decimal points
+            // Pattern: remove commas that are NOT followed by exactly 1-2 digits before decimal
+            // This handles cases like "1,234.50" -> "1234.50" and "1,234,567.89" -> "1234567.89"
+            const cleaned = trimmed.replace(/,/g, '');
+
+            return cleaned;
+        }
+
+        function parsePasteData() {
+            const pasteText = document.getElementById('pasteInput').value.trim();
+            if (!pasteText) {
+                alert('Please paste some data first');
+                return;
+            }
+
+            const lines = pasteText.split('\n');
+            const data = loadData();
+            let count = 0;
+            let warningMessages = [];
+
+            lines.forEach((line, lineIdx) => {
+                const cells = line.split('\t').map(c => c.trim());
+                if (cells.length > 0 && cells[0] !== '') {
+                    const rowData = {};
+                    columns.forEach((col, idx) => {
+                        let cellValue = cells[idx] || '';
+
+                        // Clean numeric values by removing commas
+                        if (cellValue) {
+                            const cleanedValue = cleanNumericValue(cellValue);
+
+                            // Log if formatting was changed
+                            if (cleanedValue !== cellValue && /[\d.,]/.test(cellValue)) {
+                                console.log(`Row ${count + 1}, Column "${columnLabels[col]}": "${cellValue}" -> "${cleanedValue}"`);
+                            }
+
+                            rowData[col] = cleanedValue;
+                        } else {
+                            rowData[col] = '';
+                        }
+                    });
+                    data.push(rowData);
+                    count++;
+                }
+            });
+
+            saveData(data);
+            renderTable(data);
+            document.getElementById('pasteInput').value = '';
+            document.getElementById('pasteArea').style.display = 'none';
+
+            // Show success message with formatting info
+            let successMsg = `${count} rows imported successfully!`;
+            if (count > 0) {
+                successMsg += '\nComma-formatted numbers have been automatically cleaned for proper calculations.';
+                successMsg += '\nExample: "1,234.50" → "1234.50"';
+            }
+            alert(successMsg);
+        }
+
+        // Close modal on click outside
+        window.onclick = (event) => {
+            const previewModal = document.getElementById('previewModal');
+            if (event.target === previewModal) {
+                previewModal.style.display = 'none';
+            }
+
+            const configOverlay = document.getElementById('columnConfigOverlay');
+            if (event.target === configOverlay) {
+                cancelColumnConfig();
+            }
+        };
+
+        // ESC key closes modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const previewModal = document.getElementById('previewModal');
+                if (previewModal && previewModal.style.display === 'block') {
+                    previewModal.style.display = 'none';
+                    return;
+                }
+                const configOverlay = document.getElementById('columnConfigOverlay');
+                if (configOverlay && configOverlay.style.display === 'block') {
+                    cancelColumnConfig();
+                }
+            }
+        });
+
+        // Focus management for modals
+        function showModalWithFocusManagement(modal) {
+            modal.style.display = 'block';
+            // Focus the first focusable element in the modal
+            const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            if (focusableElements.length > 0) {
+                focusableElements[0].focus();
+            }
+        }
+
+        function closeModalWithFocusReturn(modal, triggerElement) {
+            modal.style.display = 'none';
+            // Return focus to the trigger element
+            if (triggerElement) {
+                triggerElement.focus();
+            }
+        }
+
+        // PWA Install
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').style.display = 'inline-flex';
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                document.getElementById('installBtn').style.display = 'none';
+            }
+        });
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+        }
+
+        // Offline detection
+        window.addEventListener('online', () => {
+            document.getElementById('offline-indicator').style.display = 'none';
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('offline-indicator').style.display = 'flex';
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            loadColumns();
+            renderColumnManager();
+            initializeTable();
+            updateButtonStates();
+            const now = new Date();
+            document.getElementById('salaryMonth').value = String(now.getMonth() + 1).padStart(2, '0');
+        });
+
+        function initializeTable() {
+            const data = loadData();
+            renderTable(data);
+        }
+    </script>
+</body>
+</html>
