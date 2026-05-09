@@ -53,6 +53,8 @@
             --slip-primary-color: #1f3a5b;
             --slip-secondary-color: #b8d4e8;
             --slip-text-dark: #333;
+            --slip-earnings-bg: #e8f0f8;
+            --slip-deductions-bg: #f5d7dd;
             /* Typography Scale (8px base) */
             --font-size-h1: 32px;
             --font-size-h2: 24px;
@@ -820,13 +822,13 @@
         }
 
         .slip-earnings-section {
-            background-color: #e8f0f8;
+            background-color: var(--slip-earnings-bg, #e8f0f8);
             padding: 10px;
             line-height: 1.4;
         }
 
         .slip-deductions-section {
-            background-color: #f5d7dd;
+            background-color: var(--slip-deductions-bg, #f5d7dd);
             padding: 10px;
             line-height: 1.4;
         }
@@ -899,13 +901,13 @@
         .slip-cell-label.slip-earnings-section,
         .slip-cell-value.slip-earnings-section,
         .slip-cell-empty.slip-earnings-section {
-            background-color: #e8f0f8;
+            background-color: var(--slip-earnings-bg, #e8f0f8);
         }
 
         .slip-cell-label.slip-deductions-section,
         .slip-cell-value.slip-deductions-section,
         .slip-cell-empty.slip-deductions-section {
-            background-color: #f5d7dd;
+            background-color: var(--slip-deductions-bg, #f5d7dd);
         }
 
         .slip-section-header {
@@ -1371,6 +1373,46 @@
                 transform: translateX(20px);
             }
         }
+
+        /* Slip Appearance Panel */
+        .slip-appearance-panel { margin-top: 20px; padding: 20px; background: var(--light-bg); border-radius: 8px; border: 1px solid var(--border-color); }
+        .appearance-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @media (max-width: 768px) { .appearance-row { grid-template-columns: 1fr; } }
+        .appearance-label { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+
+        /* Theme Cards */
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; }
+        .theme-card { border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+        .theme-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+        .theme-card.active { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(75,143,255,0.3); }
+        .theme-card-swatch { height: 26px; }
+        .theme-card-stripe { height: 9px; }
+        .theme-card-label { font-size: 10px; font-weight: 700; padding: 5px 3px; text-align: center; color: var(--text-primary); background: var(--card-bg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Custom Color Pickers */
+        .custom-colors { display: none; gap: 10px; flex-wrap: wrap; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+        .custom-colors.visible { display: flex; }
+        .color-pick-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .color-pick-item label { font-size: 10px; font-weight: 700; color: var(--text-secondary); }
+        .color-pick-item input[type="color"] { width: 36px; height: 28px; border: 2px solid var(--border-color); border-radius: 5px; padding: 2px; cursor: pointer; background: none; }
+
+        /* Density Picker */
+        .density-group { display: flex; gap: 8px; }
+        .density-btn { flex: 1; padding: 10px 6px; border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; text-align: center; background: var(--card-bg); color: var(--text-secondary); transition: all 0.2s; font-size: 12px; font-weight: 700; }
+        .density-btn.active { border-color: var(--primary-color); background: rgba(75,143,255,0.1); color: var(--primary-color); }
+        .density-btn:hover:not(.active) { border-color: var(--text-secondary); color: var(--text-primary); }
+        .density-lines { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 0 auto 5px; width: 24px; }
+        .density-line { width: 100%; background: currentColor; border-radius: 2px; opacity: 0.5; }
+        .density-btn.active .density-line { opacity: 1; }
+
+        /* Preview Toolbar */
+        .preview-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 12px; }
+        .preview-toolbar .zoom-wrap { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+        .preview-toolbar .zoom-wrap label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+        .preview-toolbar .zoom-wrap input[type=range] { width: 70px; accent-color: var(--primary-color); }
+        .preview-toolbar .zoom-wrap span { font-size: 12px; color: var(--text-secondary); min-width: 34px; }
+        #previewZoomContent { overflow: auto; }
+        .preview-zoom-inner { transform-origin: top center; transition: transform 0.15s; }
     </style>
 </head>
 <body>
@@ -1513,6 +1555,40 @@
                             <option value="1">1 Slip per page</option>
                             <option value="2" selected>2 Slips per page</option>
                         </select>
+                    </div>
+                </div>
+
+                <!-- Slip Appearance -->
+                <div class="slip-appearance-panel">
+                    <div class="appearance-row">
+                        <div>
+                            <div class="appearance-label">🎨 Slip Color Theme</div>
+                            <div class="theme-grid" id="themeGrid"></div>
+                            <div class="custom-colors" id="customColors">
+                                <div class="color-pick-item"><label>Header</label><input type="color" id="cpPrimary" value="#1f3a5b" oninput="applyCustomColors()"></div>
+                                <div class="color-pick-item"><label>Sections</label><input type="color" id="cpSecondary" value="#b8d4e8" oninput="applyCustomColors()"></div>
+                                <div class="color-pick-item"><label>Earnings BG</label><input type="color" id="cpEarnings" value="#e8f0f8" oninput="applyCustomColors()"></div>
+                                <div class="color-pick-item"><label>Deductions BG</label><input type="color" id="cpDeductions" value="#f5d7dd" oninput="applyCustomColors()"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="appearance-label">📏 Print Row Height (Density)</div>
+                            <div class="density-group">
+                                <div class="density-btn" data-d="compact" onclick="setDensity('compact')">
+                                    <div class="density-lines"><div class="density-line" style="height:2px"></div><div class="density-line" style="height:2px"></div><div class="density-line" style="height:2px"></div><div class="density-line" style="height:2px"></div></div>
+                                    Compact
+                                </div>
+                                <div class="density-btn active" data-d="standard" onclick="setDensity('standard')">
+                                    <div class="density-lines"><div class="density-line" style="height:3px"></div><div class="density-line" style="height:3px"></div><div class="density-line" style="height:3px"></div></div>
+                                    Standard
+                                </div>
+                                <div class="density-btn" data-d="spacious" onclick="setDensity('spacious')">
+                                    <div class="density-lines"><div class="density-line" style="height:5px"></div><div class="density-line" style="height:5px"></div></div>
+                                    Spacious
+                                </div>
+                            </div>
+                            <p style="font-size:11px;color:var(--text-secondary);margin-top:10px;line-height:1.5">Controls row height, font size and spacing. Use Compact for landscape 2-per-sheet printing.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1720,13 +1796,28 @@
     </footer>
 
     <!-- Preview Modal -->
-    <div id="previewModal" class="modal">
-        <div class="modal-content">
+    <div id="previewModal" class="modal" onclick="if(event.target===this)closePreview()">
+        <div class="modal-content" style="max-width:780px;">
             <div class="modal-header">
                 <h2>Salary Slip Preview</h2>
                 <button class="close-btn" onclick="closePreview()">×</button>
             </div>
-            <div id="previewContent"></div>
+            <div class="preview-toolbar">
+                <button class="btn btn-success btn-sm" onclick="printCurrentPreview()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    Print This
+                </button>
+                <div class="zoom-wrap">
+                    <label>Zoom</label>
+                    <input type="range" min="50" max="120" value="90" id="previewZoom" oninput="setPreviewZoom(this.value)">
+                    <span id="previewZoomLabel">90%</span>
+                </div>
+            </div>
+            <div id="previewZoomContent">
+                <div class="preview-zoom-inner" id="previewZoomInner">
+                    <div id="previewContent"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1796,6 +1887,122 @@
     </div>
 
     <script>
+        // === SLIP THEMES ===
+        const slipThemes = {
+            corporate: { name: 'Corporate', primary: '#1f3a5b', secondary: '#b8d4e8', earnings: '#e8f0f8', deductions: '#f5d7dd' },
+            forest:    { name: 'Forest',    primary: '#1a5c2a', secondary: '#b8e8c4', earnings: '#eaf5ec', deductions: '#fdf0ea' },
+            royal:     { name: 'Royal',     primary: '#4a1a7a', secondary: '#d4b8e8', earnings: '#f3eafd', deductions: '#fde8f5' },
+            crimson:   { name: 'Crimson',   primary: '#7a1a1a', secondary: '#e8b8b8', earnings: '#fdeaea', deductions: '#fdf5ea' },
+            ocean:     { name: 'Ocean',     primary: '#0a5c7a', secondary: '#b8e0e8', earnings: '#e8f7f9', deductions: '#fdeaea' },
+            gold:      { name: 'Gold',      primary: '#6b4c00', secondary: '#f0d890', earnings: '#fdf8e8', deductions: '#fdeaea' },
+            slate:     { name: 'Slate',     primary: '#2d3748', secondary: '#c8d3e8', earnings: '#eaecf5', deductions: '#f5eaea' },
+            custom:    { name: 'Custom ✏️', primary: '#1f3a5b', secondary: '#b8d4e8', earnings: '#e8f0f8', deductions: '#f5d7dd' }
+        };
+
+        const densitySettings = {
+            compact:  { cell: '4px 5px',  fs: '11px', lh: '1.25', sig: '22px', hpad: '6px',  slipPad: '12px', titleFs: '13px', headFs: '16px', netFs: '12px', footMt: '4px' },
+            standard: { cell: '5px 6px',  fs: '12px', lh: '1.3',  sig: '26px', hpad: '8px',  slipPad: '15px', titleFs: '15px', headFs: '18px', netFs: '13px', footMt: '5px' },
+            spacious: { cell: '8px 10px', fs: '13px', lh: '1.4',  sig: '36px', hpad: '10px', slipPad: '22px', titleFs: '17px', headFs: '20px', netFs: '14px', footMt: '8px' }
+        };
+
+        let currentSlipTheme = localStorage.getItem('slipTheme') || 'corporate';
+        let currentDensity = localStorage.getItem('printDensity') || 'standard';
+
+        // Load saved custom theme colors
+        const savedCustom = localStorage.getItem('customThemeColors');
+        if (savedCustom) Object.assign(slipThemes.custom, JSON.parse(savedCustom));
+
+        function initSlipAppearance() {
+            // Render theme grid
+            const grid = document.getElementById('themeGrid');
+            if (!grid) return;
+            grid.innerHTML = Object.entries(slipThemes).map(([key, t]) => `
+                <div class="theme-card ${key === currentSlipTheme ? 'active' : ''}" onclick="selectSlipTheme('${key}')" title="${t.name}">
+                    <div class="theme-card-swatch" style="background:${t.primary}"></div>
+                    <div class="theme-card-stripe" style="background:${t.secondary}"></div>
+                    <div class="theme-card-label">${t.name}</div>
+                </div>
+            `).join('');
+
+            // Apply saved theme
+            applySlipThemeCss(currentSlipTheme);
+
+            // Show custom pickers if custom selected
+            if (currentSlipTheme === 'custom') {
+                document.getElementById('customColors').classList.add('visible');
+                const t = slipThemes.custom;
+                document.getElementById('cpPrimary').value = t.primary;
+                document.getElementById('cpSecondary').value = t.secondary;
+                document.getElementById('cpEarnings').value = t.earnings;
+                document.getElementById('cpDeductions').value = t.deductions;
+            }
+
+            // Init density buttons
+            document.querySelectorAll('.density-btn').forEach(btn =>
+                btn.classList.toggle('active', btn.dataset.d === currentDensity)
+            );
+        }
+
+        function selectSlipTheme(key) {
+            currentSlipTheme = key;
+            localStorage.setItem('slipTheme', key);
+            document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.theme-card').forEach(c => {
+                if (c.getAttribute('onclick').includes(`'${key}'`)) c.classList.add('active');
+            });
+            if (key === 'custom') {
+                document.getElementById('customColors').classList.add('visible');
+                applyCustomColors();
+            } else {
+                document.getElementById('customColors').classList.remove('visible');
+                applySlipThemeCss(key);
+            }
+            updateSlipDesignerPreview();
+        }
+
+        function applySlipThemeCss(key) {
+            const t = slipThemes[key];
+            const r = document.documentElement;
+            r.style.setProperty('--slip-primary-color', t.primary);
+            r.style.setProperty('--slip-secondary-color', t.secondary);
+            r.style.setProperty('--slip-earnings-bg', t.earnings);
+            r.style.setProperty('--slip-deductions-bg', t.deductions);
+        }
+
+        function applyCustomColors() {
+            const t = {
+                primary: document.getElementById('cpPrimary').value,
+                secondary: document.getElementById('cpSecondary').value,
+                earnings: document.getElementById('cpEarnings').value,
+                deductions: document.getElementById('cpDeductions').value
+            };
+            Object.assign(slipThemes.custom, t);
+            localStorage.setItem('customThemeColors', JSON.stringify(t));
+            applySlipThemeCss('custom');
+            updateSlipDesignerPreview();
+        }
+
+        function setDensity(d) {
+            currentDensity = d;
+            localStorage.setItem('printDensity', d);
+            document.querySelectorAll('.density-btn').forEach(btn =>
+                btn.classList.toggle('active', btn.dataset.d === d)
+            );
+        }
+
+        function getCurrentTheme() {
+            return slipThemes[currentSlipTheme] || slipThemes.corporate;
+        }
+
+        function getCurrentDensity() {
+            return densitySettings[currentDensity] || densitySettings.standard;
+        }
+
+        function setPreviewZoom(val) {
+            document.getElementById('previewZoomLabel').textContent = val + '%';
+            document.getElementById('previewZoomInner').style.transform = `scale(${val/100})`;
+        }
+
         // Theme Management
         function initTheme() {
             const theme = localStorage.getItem('salaryTheme') || 'light';
@@ -2121,6 +2328,7 @@
                     updateOptionLabelsUI();
                 }
             });
+            initSlipAppearance();
         });
 
         // Render table
@@ -2384,52 +2592,49 @@
             }
 
             const data = loadData();
-            const selectedIndices = Array.from(checkboxes).map(cb => {
-                return parseInt(cb.closest('tr').id.split('-')[1]);
-            });
+            const selectedIndices = Array.from(checkboxes).map(cb => parseInt(cb.closest('tr').id.split('-')[1]));
 
             let printContent = '';
             selectedIndices.forEach((idx) => {
                 printContent += `<div class="salary-slip">${generateSalarySlip(data[idx])}</div>`;
             });
 
+            const t = getCurrentTheme();
+            const d = getCurrentDensity();
+
             const styles = `
                 <style>
                     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
                     html, body { margin: 0; padding: 0; background: white !important; }
-                    body { font-family: Arial, sans-serif; color: #333; font-size: 13px; line-height: 1.4; }
+                    body { font-family: Arial, sans-serif; color: #333; font-size: ${d.fs}; line-height: ${d.lh}; }
                     @page { margin: 8mm; }
-                    .salary-slip { page-break-after: always; padding: 15px; background: white !important; font-size: 12px; line-height: 1.3; margin: 0; }
-                    .slip-company-header { background-color: #1f3a5b !important; color: white !important; text-align: center; padding: 8px; font-size: 18px; font-weight: bold; margin: -15px -15px 0 -15px; letter-spacing: 1px; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3; }
-                    .slip-title { background-color: #b8d4e8 !important; color: #1f3a5b !important; text-align: center; padding: 6px; font-size: 15px; font-weight: bold; border-bottom: 1px solid #999; line-height: 1.3; }
-                    .slip-main-table { width: 100%; border-collapse: collapse; margin-top: 0; line-height: 1.3; }
-                    .slip-main-table td { padding: 5px 6px; border: 1px solid #999; vertical-align: middle; line-height: 1.3; }
-                    .slip-month-row { background-color: #f0f0f0 !important; line-height: 1.3; }
-                    .slip-month-label { font-weight: bold; padding: 5px 6px; border: 1px solid #999; text-align: left; line-height: 1.3; background-color: #f0f0f0 !important; vertical-align: middle; }
-                    .slip-month-value { border: 1px solid #999; padding: 5px 6px; text-align: right; line-height: 1.3; background-color: #ffffff !important; vertical-align: middle; }
-                    .slip-cell-label { text-align: left; font-weight: 600; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; vertical-align: middle; }
-                    .slip-cell-value { text-align: right; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; vertical-align: middle; }
-                    .slip-cell-empty { padding: 5px 6px; border: 1px solid #999; background-color: #ffffff; line-height: 1.3; vertical-align: middle; }
-                    .slip-cell-label.slip-earnings-section { background-color: #e8f0f8 !important; }
-                    .slip-cell-value.slip-earnings-section { background-color: #e8f0f8 !important; }
-                    .slip-cell-empty.slip-earnings-section { background-color: #e8f0f8 !important; }
-                    .slip-cell-label.slip-deductions-section { background-color: #f5d7dd !important; }
-                    .slip-cell-value.slip-deductions-section { background-color: #f5d7dd !important; }
-                    .slip-cell-empty.slip-deductions-section { background-color: #f5d7dd !important; }
-                    .slip-section-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; vertical-align: middle; }
-                    .slip-row-item { border: 1px solid #999; padding: 5px 6px; line-height: 1.3; vertical-align: middle; }
-                    .slip-earnings-section { background-color: #e8f0f8 !important; padding: 5px 6px; line-height: 1.3; }
-                    .slip-deductions-section { background-color: #f5d7dd !important; padding: 5px 6px; line-height: 1.3; }
-                    .slip-earnings-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; text-align: center; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; }
-                    .slip-deductions-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; text-align: center; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; }
-                    .slip-item-label { font-weight: 600; color: #333 !important; vertical-align: middle; line-height: 1.3; }
-                    .slip-item-value { color: #333 !important; line-height: 1.3; }
-                    .slip-net-salary { background-color: #1f3a5b !important; color: white !important; font-weight: bold; padding: 8px; font-size: 13px; border: 1px solid #999; display: grid; grid-template-columns: 1fr 1fr; align-items: center; text-align: center; line-height: 1.3; }
+                    .salary-slip { page-break-after: always; padding: ${d.slipPad}; background: white !important; font-size: ${d.fs}; line-height: ${d.lh}; margin: 0; }
+                    .slip-company-header { background-color: ${t.primary} !important; color: white !important; text-align: center; padding: ${d.hpad}; font-size: ${d.headFs}; font-weight: bold; margin: -${d.slipPad} -${d.slipPad} 0 -${d.slipPad}; letter-spacing: 1px; word-wrap: break-word; overflow-wrap: break-word; line-height: ${d.lh}; }
+                    .slip-title { background-color: ${t.secondary} !important; color: ${t.primary} !important; text-align: center; padding: ${d.hpad}; font-size: ${d.titleFs}; font-weight: bold; border-bottom: 1px solid #999; line-height: ${d.lh}; }
+                    .slip-main-table { width: 100%; border-collapse: collapse; margin-top: 0; line-height: ${d.lh}; }
+                    .slip-main-table td { padding: ${d.cell}; border: 1px solid #999; vertical-align: middle; line-height: ${d.lh}; }
+                    .slip-month-row { background-color: #f0f0f0 !important; line-height: ${d.lh}; }
+                    .slip-month-label { font-weight: bold; padding: ${d.cell}; border: 1px solid #999; text-align: left; line-height: ${d.lh}; background-color: #f0f0f0 !important; vertical-align: middle; }
+                    .slip-month-value { border: 1px solid #999; padding: ${d.cell}; text-align: right; line-height: ${d.lh}; background-color: #ffffff !important; vertical-align: middle; }
+                    .slip-cell-label { text-align: left; font-weight: 600; padding: ${d.cell}; border: 1px solid #999; line-height: ${d.lh}; vertical-align: middle; }
+                    .slip-cell-value { text-align: right; padding: ${d.cell}; border: 1px solid #999; line-height: ${d.lh}; vertical-align: middle; }
+                    .slip-cell-empty { padding: ${d.cell}; border: 1px solid #999; background-color: #ffffff; line-height: ${d.lh}; vertical-align: middle; }
+                    .slip-cell-label.slip-earnings-section, .slip-cell-value.slip-earnings-section, .slip-cell-empty.slip-earnings-section { background-color: ${t.earnings} !important; }
+                    .slip-cell-label.slip-deductions-section, .slip-cell-value.slip-deductions-section, .slip-cell-empty.slip-deductions-section { background-color: ${t.deductions} !important; }
+                    .slip-section-header { background-color: ${t.secondary} !important; color: ${t.primary} !important; font-weight: bold; padding: ${d.cell}; border: 1px solid #999; line-height: ${d.lh}; vertical-align: middle; }
+                    .slip-row-item { border: 1px solid #999; padding: ${d.cell}; line-height: ${d.lh}; vertical-align: middle; }
+                    .slip-earnings-section { background-color: ${t.earnings} !important; padding: ${d.cell}; line-height: ${d.lh}; }
+                    .slip-deductions-section { background-color: ${t.deductions} !important; padding: ${d.cell}; line-height: ${d.lh}; }
+                    .slip-earnings-header { background-color: ${t.secondary} !important; color: ${t.primary} !important; font-weight: bold; text-align: center; padding: ${d.cell}; border: 1px solid #999; line-height: ${d.lh}; }
+                    .slip-deductions-header { background-color: ${t.secondary} !important; color: ${t.primary} !important; font-weight: bold; text-align: center; padding: ${d.cell}; border: 1px solid #999; line-height: ${d.lh}; }
+                    .slip-item-label { font-weight: 600; color: #333 !important; vertical-align: middle; line-height: ${d.lh}; }
+                    .slip-item-value { color: #333 !important; line-height: ${d.lh}; }
+                    .slip-net-salary { background-color: ${t.primary} !important; color: white !important; font-weight: bold; padding: ${d.hpad}; font-size: ${d.netFs}; border: 1px solid #999; display: grid; grid-template-columns: 1fr 1fr; align-items: center; text-align: center; line-height: ${d.lh}; }
                     .slip-net-label { text-align: left; }
                     .slip-net-value { text-align: right; padding-right: 10px; }
-                    .slip-footer-table { width: 100%; border-collapse: collapse; margin-top: 5px; line-height: 1.3; }
-                    .slip-footer-table td { border: 1px solid #999; padding: 5px 6px; text-align: center; font-weight: 600; line-height: 1.3; vertical-align: middle; color: #333; }
-                    .slip-footer-table tr:last-child td { background-color: #f0f0f0 !important; }
+                    .slip-footer-table { width: 100%; border-collapse: collapse; margin-top: ${d.footMt}; line-height: ${d.lh}; }
+                    .slip-footer-table td { border: 1px solid #999; padding: ${d.cell}; text-align: center; font-weight: 600; line-height: ${d.lh}; vertical-align: middle; color: #333; }
+                    .slip-footer-table tr:last-child td { height: ${d.sig}; background-color: #f0f0f0 !important; }
                     @media print {
                         body { margin: 0; padding: 0; background: white; }
                         .salary-slip { margin: 0; page-break-inside: avoid; }
@@ -2441,6 +2646,53 @@
             newWindow.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Salary Slips</title>${styles}</head><body>${printContent}</body></html>`);
             newWindow.document.close();
             setTimeout(() => newWindow.print(), 500);
+        }
+
+        function printCurrentPreview() {
+            const content = document.getElementById('previewContent').innerHTML;
+            if (!content) return;
+            const t = getCurrentTheme();
+            const d = getCurrentDensity();
+            const win = window.open('', '', 'height=900,width=700');
+            const styles = buildPrintStyles(t, d);
+            win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Salary Slip</title>${styles}</head><body><div class="salary-slip">${content}</div></body></html>`);
+            win.document.close();
+            setTimeout(() => win.print(), 500);
+        }
+
+        function buildPrintStyles(t, d) {
+            return `<style>
+                * { margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important; }
+                html,body{margin:0;padding:0;background:white!important;}
+                body{font-family:Arial,sans-serif;color:#333;font-size:${d.fs};line-height:${d.lh};}
+                @page{margin:8mm;}
+                .salary-slip{padding:${d.slipPad};background:white!important;font-size:${d.fs};line-height:${d.lh};}
+                .slip-company-header{background-color:${t.primary}!important;color:white!important;text-align:center;padding:${d.hpad};font-size:${d.headFs};font-weight:bold;margin:-${d.slipPad} -${d.slipPad} 0 -${d.slipPad};letter-spacing:1px;word-wrap:break-word;line-height:${d.lh};}
+                .slip-title{background-color:${t.secondary}!important;color:${t.primary}!important;text-align:center;padding:${d.hpad};font-size:${d.titleFs};font-weight:bold;border-bottom:1px solid #999;line-height:${d.lh};}
+                .slip-main-table{width:100%;border-collapse:collapse;line-height:${d.lh};}
+                .slip-main-table td{padding:${d.cell};border:1px solid #999;vertical-align:middle;}
+                .slip-month-row{background-color:#f0f0f0!important;}
+                .slip-month-label{font-weight:bold;padding:${d.cell};border:1px solid #999;text-align:left;background-color:#f0f0f0!important;vertical-align:middle;}
+                .slip-month-value{border:1px solid #999;padding:${d.cell};text-align:right;background-color:#fff!important;vertical-align:middle;}
+                .slip-cell-label{text-align:left;font-weight:600;padding:${d.cell};border:1px solid #999;vertical-align:middle;}
+                .slip-cell-value{text-align:right;padding:${d.cell};border:1px solid #999;vertical-align:middle;}
+                .slip-cell-empty{padding:${d.cell};border:1px solid #999;background:#fff;vertical-align:middle;}
+                .slip-cell-label.slip-earnings-section,.slip-cell-value.slip-earnings-section,.slip-cell-empty.slip-earnings-section{background-color:${t.earnings}!important;}
+                .slip-cell-label.slip-deductions-section,.slip-cell-value.slip-deductions-section,.slip-cell-empty.slip-deductions-section{background-color:${t.deductions}!important;}
+                .slip-section-header{background-color:${t.secondary}!important;color:${t.primary}!important;font-weight:bold;padding:${d.cell};border:1px solid #999;vertical-align:middle;}
+                .slip-earnings-section{background-color:${t.earnings}!important;padding:${d.cell};}
+                .slip-deductions-section{background-color:${t.deductions}!important;padding:${d.cell};}
+                .slip-earnings-header{background-color:${t.secondary}!important;color:${t.primary}!important;font-weight:bold;text-align:center;padding:${d.cell};border:1px solid #999;}
+                .slip-deductions-header{background-color:${t.secondary}!important;color:${t.primary}!important;font-weight:bold;text-align:center;padding:${d.cell};border:1px solid #999;}
+                .slip-item-label{font-weight:600;color:#333!important;vertical-align:middle;}
+                .slip-net-salary{background-color:${t.primary}!important;color:white!important;font-weight:bold;padding:${d.hpad};font-size:${d.netFs};border:1px solid #999;display:grid;grid-template-columns:1fr 1fr;align-items:center;text-align:center;}
+                .slip-net-label{text-align:left;}
+                .slip-net-value{text-align:right;padding-right:10px;}
+                .slip-footer-table{width:100%;border-collapse:collapse;margin-top:${d.footMt};}
+                .slip-footer-table td{border:1px solid #999;padding:${d.cell};text-align:center;font-weight:600;vertical-align:middle;color:#333;}
+                .slip-footer-table tr:last-child td{height:${d.sig};background-color:#f0f0f0!important;}
+                @media print{body{margin:0;padding:0;}.salary-slip{margin:0;page-break-inside:avoid;}}
+            </style>`;
         }
 
         // Delete selected
