@@ -2361,8 +2361,8 @@
                         <td>Authorized Signature</td>
                     </tr>
                     <tr>
-                        <td style="height: 40px;"></td>
-                        <td style="height: 40px;"></td>
+                        <td style="height: 26px;"></td>
+                        <td style="height: 26px;"></td>
                     </tr>
                 </table>
 
@@ -2398,36 +2398,37 @@
                     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
                     html, body { margin: 0; padding: 0; background: white !important; }
                     body { font-family: Arial, sans-serif; color: #333; font-size: 13px; line-height: 1.4; }
-                    .salary-slip { page-break-after: always; padding: 30px; background: white !important; font-size: 13px; line-height: 1.4; margin: 0; }
-                    .slip-company-header { background-color: #1f3a5b !important; color: white !important; text-align: center; padding: 12px; font-size: 22px; font-weight: bold; margin: -30px -30px 0 -30px; letter-spacing: 1px; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.4; }
-                    .slip-title { background-color: #b8d4e8 !important; color: #1f3a5b !important; text-align: center; padding: 10px; font-size: 18px; font-weight: bold; border-bottom: 1px solid #999; line-height: 1.4; }
-                    .slip-main-table { width: 100%; border-collapse: collapse; margin-top: 0; line-height: 1.4; }
-                    .slip-main-table td { padding: 10px; border: 1px solid #999; vertical-align: middle; line-height: 1.4; }
-                    .slip-month-row { background-color: #f0f0f0 !important; line-height: 1.4; }
-                    .slip-month-label { font-weight: bold; padding: 10px; border: 1px solid #999; text-align: left; line-height: 1.4; background-color: #f0f0f0 !important; vertical-align: middle; }
-                    .slip-month-value { border: 1px solid #999; padding: 10px; text-align: right; line-height: 1.4; background-color: #ffffff !important; vertical-align: middle; }
-                    .slip-cell-label { text-align: left; font-weight: 600; padding: 10px; border: 1px solid #999; line-height: 1.4; vertical-align: middle; }
-                    .slip-cell-value { text-align: right; padding: 10px; border: 1px solid #999; line-height: 1.4; vertical-align: middle; }
-                    .slip-cell-empty { padding: 10px; border: 1px solid #999; background-color: #ffffff; line-height: 1.4; vertical-align: middle; }
+                    @page { margin: 8mm; }
+                    .salary-slip { page-break-after: always; padding: 15px; background: white !important; font-size: 12px; line-height: 1.3; margin: 0; }
+                    .slip-company-header { background-color: #1f3a5b !important; color: white !important; text-align: center; padding: 8px; font-size: 18px; font-weight: bold; margin: -15px -15px 0 -15px; letter-spacing: 1px; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3; }
+                    .slip-title { background-color: #b8d4e8 !important; color: #1f3a5b !important; text-align: center; padding: 6px; font-size: 15px; font-weight: bold; border-bottom: 1px solid #999; line-height: 1.3; }
+                    .slip-main-table { width: 100%; border-collapse: collapse; margin-top: 0; line-height: 1.3; }
+                    .slip-main-table td { padding: 5px 6px; border: 1px solid #999; vertical-align: middle; line-height: 1.3; }
+                    .slip-month-row { background-color: #f0f0f0 !important; line-height: 1.3; }
+                    .slip-month-label { font-weight: bold; padding: 5px 6px; border: 1px solid #999; text-align: left; line-height: 1.3; background-color: #f0f0f0 !important; vertical-align: middle; }
+                    .slip-month-value { border: 1px solid #999; padding: 5px 6px; text-align: right; line-height: 1.3; background-color: #ffffff !important; vertical-align: middle; }
+                    .slip-cell-label { text-align: left; font-weight: 600; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; vertical-align: middle; }
+                    .slip-cell-value { text-align: right; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; vertical-align: middle; }
+                    .slip-cell-empty { padding: 5px 6px; border: 1px solid #999; background-color: #ffffff; line-height: 1.3; vertical-align: middle; }
                     .slip-cell-label.slip-earnings-section { background-color: #e8f0f8 !important; }
                     .slip-cell-value.slip-earnings-section { background-color: #e8f0f8 !important; }
                     .slip-cell-empty.slip-earnings-section { background-color: #e8f0f8 !important; }
                     .slip-cell-label.slip-deductions-section { background-color: #f5d7dd !important; }
                     .slip-cell-value.slip-deductions-section { background-color: #f5d7dd !important; }
                     .slip-cell-empty.slip-deductions-section { background-color: #f5d7dd !important; }
-                    .slip-section-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; padding: 10px; border: 1px solid #999; line-height: 1.4; vertical-align: middle; }
-                    .slip-row-item { border: 1px solid #999; padding: 10px; line-height: 1.4; vertical-align: middle; }
-                    .slip-earnings-section { background-color: #e8f0f8 !important; padding: 10px; line-height: 1.4; }
-                    .slip-deductions-section { background-color: #f5d7dd !important; padding: 10px; line-height: 1.4; }
-                    .slip-earnings-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #999; line-height: 1.4; }
-                    .slip-deductions-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #999; line-height: 1.4; }
-                    .slip-item-label { font-weight: 600; color: #333 !important; vertical-align: middle; line-height: 1.4; }
-                    .slip-item-value { color: #333 !important; line-height: 1.4; }
-                    .slip-net-salary { background-color: #1f3a5b !important; color: white !important; font-weight: bold; padding: 12px; font-size: 16px; border: 1px solid #999; display: grid; grid-template-columns: 1fr 1fr; align-items: center; text-align: center; line-height: 1.4; }
+                    .slip-section-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; vertical-align: middle; }
+                    .slip-row-item { border: 1px solid #999; padding: 5px 6px; line-height: 1.3; vertical-align: middle; }
+                    .slip-earnings-section { background-color: #e8f0f8 !important; padding: 5px 6px; line-height: 1.3; }
+                    .slip-deductions-section { background-color: #f5d7dd !important; padding: 5px 6px; line-height: 1.3; }
+                    .slip-earnings-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; text-align: center; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; }
+                    .slip-deductions-header { background-color: #b8d4e8 !important; color: #1f3a5b !important; font-weight: bold; text-align: center; padding: 5px 6px; border: 1px solid #999; line-height: 1.3; }
+                    .slip-item-label { font-weight: 600; color: #333 !important; vertical-align: middle; line-height: 1.3; }
+                    .slip-item-value { color: #333 !important; line-height: 1.3; }
+                    .slip-net-salary { background-color: #1f3a5b !important; color: white !important; font-weight: bold; padding: 8px; font-size: 13px; border: 1px solid #999; display: grid; grid-template-columns: 1fr 1fr; align-items: center; text-align: center; line-height: 1.3; }
                     .slip-net-label { text-align: left; }
-                    .slip-net-value { text-align: right; padding-right: 20px; }
-                    .slip-footer-table { width: 100%; border-collapse: collapse; margin-top: 10px; line-height: 1.4; }
-                    .slip-footer-table td { border: 1px solid #999; padding: 10px; text-align: center; font-weight: 600; line-height: 1.4; vertical-align: middle; color: #333; }
+                    .slip-net-value { text-align: right; padding-right: 10px; }
+                    .slip-footer-table { width: 100%; border-collapse: collapse; margin-top: 5px; line-height: 1.3; }
+                    .slip-footer-table td { border: 1px solid #999; padding: 5px 6px; text-align: center; font-weight: 600; line-height: 1.3; vertical-align: middle; color: #333; }
                     .slip-footer-table tr:last-child td { background-color: #f0f0f0 !important; }
                     @media print {
                         body { margin: 0; padding: 0; background: white; }
